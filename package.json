@@ -1,0 +1,9 @@
+{
+  "name":"ase-dispatch-demo",
+  "version":"1.0.0",
+  "private":true,
+  "description":"Four-person fictional police-style coordination web demo with no runtime dependencies",
+  "scripts":{"start":"node server.js","test":"node --check server.js && node --check public/app.js"},
+  "engines":{"node":">=18"},
+  "dependencies":{}
+}

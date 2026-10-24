@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080f1a">
+  <title>ASE | Dispatch Desk — Four-User Demo</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div id="filterSurface">
+  <div class="topline"></div>
+  <header class="topbar">
+    <div class="wordmark"><span class="logo-badge">ASE</span><span><b>DISPATCH</b><small>FIELD COORDINATION // DEMO</small></span></div>
+    <div class="top-actions"><span class="network-pill"><span class="network-dot"></span><span id="connectionText">NOT CONNECTED</span></span><span class="top-clock" id="clock">--:--:--</span><button type="button" id="themeButton" class="icon-button" title="Appearance and colors">DISPLAY</button><button type="button" id="leaveButton" class="icon-button" hidden>LEAVE</button></div>
+  </header>
+  <div class="demo-banner"><span>TRAINING INTERFACE</span> Fictional coordination demo using your uploaded map image. Not an emergency service or operational police system.</div>
+  <div id="app" class="app-shell" hidden>
+    <aside class="sidebar" id="unitsPanel">
+      <div class="section-cap"><span>SESSION / 01</span><span class="signal-bars">▂▄▆</span></div>
+      <div class="sidebar-title">UNIT ROSTER <span id="countLabel" class="counter">0/4</span></div>
+      <div id="unitList" class="unit-list"></div>
+      <div class="divider-line"></div>
+      <label class="tiny-label" for="statusSelect">YOUR STATUS</label>
+      <select id="statusSelect" class="select-field"><option>Available</option><option>En route</option><option>On scene</option><option>Busy</option></select>
+      <div class="sidebar-title space-top">CONVERSATION</div>
+      <button type="button" class="room-button selected" id="publicRoomButton"><span class="room-icon">#</span><span><b>PUBLIC DISPATCH</b><small>Shared chat + map</small></span><span class="room-arrow">›</span></button>
+      <div class="side-hint">Select a unit to open a one-to-one conversation. Private reports and markers stay inside that conversation.</div>
+      <div class="side-bottom"><span>SESSION CAPACITY</span><strong>4 UNITS MAX</strong><div class="slot-grid" id="slotGrid"><span></span><span></span><span></span><span></span></div></div>
+    </aside>
+
+    <section class="chat-panel" id="chatPanel">
+      <header class="panel-header"><div><span class="eyebrow">COMMUNICATIONS</span><h2 id="chatTitle">Public Dispatch</h2><p id="chatSubtitle">Shared room · all connected units</p></div><div class="chat-header-tools"><button type="button" id="callAudioButton" class="mini-button" title="Call selected unit" disabled>VOICE</button><button type="button" id="callVideoButton" class="mini-button" title="Video call selected unit" disabled>VIDEO</button></div></header>
+      <div class="messages" id="messages" role="log" aria-label="Messages" aria-live="polite"><div class="empty-message">MESSAGES APPEAR HERE</div></div>
+      <div class="composer">
+        <div id="attachmentPreview" class="attachment-preview" hidden></div>
+        <div class="composer-line"><button type="button" class="attach-button" id="attachChatButton" title="Attach a photo, video or audio">+</button><input id="chatFileInput" type="file" accept="image/*,video/*,audio/*" hidden><button type="button" class="attach-button" id="chatCameraButton" title="Use the browser camera">CAM</button><input id="chatInput" placeholder="Message to dispatch..." maxlength="1500" autocomplete="off"><button type="button" id="radioButton" class="ptt-button" title="Hold to record a short voice message">HOLD TALK</button><button type="button" id="sendButton" class="send-button">SEND <span>↗</span></button></div>
+        <div class="composer-footer"><span id="roomScope">SCOPE: PUBLIC / 4 UNITS</span><span id="chatStatus">READY TO SEND</span></div>
+      </div>
+    </section>
+
+    <main class="work-panel" id="workPanel">
+      <div class="work-head"><div><span class="eyebrow">GEOSPATIAL / STATIC REFERENCE</span><h1>FIELD MAP <span class="heading-slash">/</span> <span id="mapScopeLabel">PUBLIC</span></h1></div><div class="image-pill"><span class="status-tiny"></span> USER-SUPPLIED IMAGE</div></div>
+      <div class="workspace-grid">
+        <section class="map-card">
+          <div class="map-toolbar"><div class="toolgroup"><button type="button" class="maptool active" data-mode="inspect">VIEW</button><button type="button" class="maptool" data-mode="mark">MARK</button><button type="button" class="maptool" data-mode="path">PATH</button><button type="button" class="maptool" data-mode="report">REPORT</button></div><div class="toolgroup"><button id="finishPath" type="button" class="maptool highlight" hidden>FINISH</button><button id="cancelPath" type="button" class="maptool" hidden>CANCEL</button><button type="button" id="gridButton" class="maptool grid-on">GRID</button></div></div>
+          <div class="map-viewport" id="mapViewport"><div class="map-board" id="mapBoard" tabindex="0" aria-label="Clickable reference map"><img src="/assets/original-map.png" alt="Original map provided by user" id="baseMap"><div id="mapGrid" class="map-grid-overlay"></div><svg id="pathLayer" viewBox="0 0 100 100" preserveAspectRatio="none"></svg><div id="markerLayer" class="marker-layer"></div><div class="map-crosshair"></div><div class="map-watermark">ASE // REFERENCE-01</div><div class="map-coords">STATIC MAP · NOT GPS</div></div></div>
+          <div class="map-footer"><span id="mapInstruction">VIEW — TAP A MARKER TO INSPECT</span><span id="coordReadout">X 00.0 / Y 00.0</span></div>
+        </section>
+        <section class="reports-card" id="reportsPanel"><div class="report-top"><div><span class="eyebrow">CASEBOARD / REPORTS</span><h2>ACTIVE REPORTS</h2></div><span class="counter" id="reportCount">00</span></div><div class="report-filters"><button class="filter-tab active" data-report-filter="all">ALL</button><button class="filter-tab" data-report-filter="Open">OPEN</button><button class="filter-tab" data-report-filter="Responding">IN PROGRESS</button><button class="filter-tab" data-report-filter="Resolved">CLOSED</button></div><div id="reportList" class="report-list"><p class="empty-reports">No reports in this conversation.</p></div><div class="reports-footer"><div class="legend-item"><i class="legend-square urgent"></i>URGENT</div><div class="legend-item"><i class="legend-square routine"></i>ROUTINE</div><div class="legend-item"><i class="legend-square resolved"></i>RESOLVED</div></div></section>
+      </div>
+      <div class="work-bottom"><div class="stat-box"><span>MAP MARKS</span><strong id="markCount">00</strong></div><div class="stat-box"><span>ROUTES</span><strong id="routeCount">00</strong></div><div class="stat-box"><span>REPORTS</span><strong id="bottomReportCount">00</strong></div><div class="work-tip" id="workTip">Choose MARK, PATH or REPORT, then tap your reference map.</div></div>
+    </main>
+  </div>
+  <nav class="mobile-nav" id="mobileNav" hidden aria-label="App sections"><button type="button" class="mobile-tab active" data-tab="chat">CHAT</button><button type="button" class="mobile-tab" data-tab="map">MAP</button><button type="button" class="mobile-tab" data-tab="reports">REPORTS</button><button type="button" class="mobile-tab" data-tab="units">UNITS</button></nav>
+</div>
+
+<!-- The dialogs are separate from the filtered surface so controls remain accessible. -->
+<div id="joinScreen" class="join-backdrop"><div class="join-card"><div class="join-line">ASE / FIELD OPERATIONS</div><div class="join-emblem">PD</div><h1>DISPATCH DESK</h1><p>Four-person browser-based coordination demo. Use the supplied reference image to place marks, draw routes, and share incident reports.</p><label class="tiny-label" for="joinName">YOUR DISPLAY NAME</label><input id="joinName" maxlength="22" placeholder="Example: Unit 04" autocomplete="nickname"><button type="button" class="join-button" id="joinButton">ENTER SESSION <span>↗</span></button><p id="joinError" class="form-error" role="alert"></p><div class="join-specs"><span>4 CONNECTED USERS</span><span>PHOTO / VIDEO REPORTS</span><span>PRIVATE CALLS</span></div><small class="disclaimer">Training/demo only. No identity verification, permanent storage, or guaranteed emergency availability.</small></div></div>
+
+<div id="formOverlay" class="overlay" hidden><section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="formTitle"><div class="modal-head"><h2 id="formTitle">NEW MAP MARK</h2><button type="button" id="formClose" class="close-btn">✕</button></div><div class="modal-body"><div id="formCoords" class="coord-pill">POSITION: X 00 / Y 00</div><label for="formName">TITLE / LABEL</label><input id="formName" maxlength="110" placeholder="e.g. Checkpoint A"><label for="formDetails">DETAILS / NOTES</label><textarea id="formDetails" rows="3" maxlength="800" placeholder="Describe the location or incident..."></textarea><div id="reportExtras" hidden><label for="formPriority">PRIORITY</label><select id="formPriority"><option>Routine</option><option>Low</option><option>High</option><option>Urgent</option></select><div class="media-buttons"><button type="button" id="reportFileButton">UPLOAD PHOTO / VIDEO</button><button type="button" id="reportCameraButton">BROWSER CAMERA</button></div><input id="reportFileInput" type="file" accept="image/*,video/*" hidden><div id="reportMediaPreview" class="media-preview" hidden></div><div class="modal-advice">Photo/video reports are visible only in the selected conversation. Max approximately 4 MB.</div></div></div><footer class="modal-footer"><button type="button" class="secondary-button" id="formCancel">CANCEL</button><button type="button" class="primary-button" id="formSave">SAVE TO MAP</button></footer></section></div>
+
+<div id="detailOverlay" class="overlay" hidden><section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="detailTitle"><div class="modal-head"><h2 id="detailTitle">REPORT DETAILS</h2><button type="button" id="detailClose" class="close-btn">✕</button></div><div class="modal-body"><div id="detailMeta" class="coord-pill"></div><div id="detailText"></div><div id="detailMedia" class="detail-media"></div><div id="detailStatusArea"><label for="detailStatus">REPORT STATUS</label><select id="detailStatus"><option>Open</option><option>Responding</option><option>Resolved</option></select></div></div><footer class="modal-footer"><button type="button" id="detailRemove" class="danger-button">REMOVE</button><button type="button" id="detailDone" class="primary-button">DONE</button></footer></section></div>
+
+<div id="cameraOverlay" class="overlay" hidden><section class="modal-card camera-modal" role="dialog" aria-modal="true"><div class="modal-head"><h2>IN-BROWSER CAMERA</h2><button type="button" id="cameraClose" class="close-btn">✕</button></div><video id="cameraPreview" autoplay playsinline muted></video><div id="cameraHint" class="camera-hint">Grant browser permission. Camera never starts automatically.</div><div class="camera-actions"><button type="button" id="cameraFlip" class="secondary-button">SWITCH CAMERA</button><button type="button" id="cameraSnap" class="primary-button">TAKE PHOTO</button><button type="button" id="cameraRecord" class="primary-button">RECORD CLIP</button><button type="button" id="cameraStop" class="danger-button" disabled>STOP</button></div><canvas id="snapshotCanvas" hidden></canvas></section></div>
+
+<div id="appearanceOverlay" class="overlay" hidden><section class="modal-card" role="dialog" aria-modal="true"><div class="modal-head"><h2>DISPLAY / COLOR CONTROL</h2><button type="button" id="appearanceClose" class="close-btn">✕</button></div><div class="modal-body"><label for="themeSelect">COLOR SCHEME</label><select id="themeSelect"><option value="navy">Navy / Signal Blue</option><option value="red">Crimson / Black</option><option value="graphite">Graphite / Steel</option><option value="green">Night / Green</option></select><label for="brightnessSlider">BRIGHTNESS <output id="brightnessValue">100%</output></label><input type="range" min="45" max="160" value="100" id="brightnessSlider"><label for="contrastSlider">CONTRAST <output id="contrastValue">100%</output></label><input type="range" min="50" max="190" value="100" id="contrastSlider"><label for="saturationSlider">SATURATION <output id="saturationValue">100%</output></label><input type="range" min="0" max="220" value="100" id="saturationSlider"><label for="hueSlider">HUE <output id="hueValue">0°</output></label><input type="range" min="-180" max="180" value="0" id="hueSlider"><button type="button" class="secondary-button" id="resetAppearance">RESET DISPLAY</button></div></section></div>
+
+<div id="incomingOverlay" class="overlay" hidden><section class="modal-card small-modal"><div class="modal-head"><h2>INCOMING CALL</h2></div><div class="modal-body"><div id="incomingInfo">Incoming call</div><div class="modal-advice">Your camera and microphone are used only after you choose Answer and grant permission.</div></div><div class="modal-footer"><button class="danger-button" id="declineCall">DECLINE</button><button class="primary-button" id="answerCall">ANSWER</button></div></section></div>
+
+<div id="callWindow" class="call-window" hidden><div class="call-head" id="callDrag"><span id="callLabel">PRIVATE CALL</span><div><button type="button" id="minimizeCall" class="call-icon">MINIMIZE</button><button type="button" id="restoreCall" class="call-icon" hidden>EXPAND</button><button type="button" id="endCall" class="call-icon end">END</button></div></div><div class="call-videos"><video id="remoteVideo" autoplay playsinline></video><video id="localVideo" autoplay muted playsinline></video><div id="audioCallLabel" class="audio-call-label">AUDIO CALL</div></div><div class="call-actions"><button type="button" id="muteButton" class="secondary-button">MUTE</button><span id="callState">CONNECTING...</span></div></div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<script src="/app.js" defer></script>
+</body></html>
